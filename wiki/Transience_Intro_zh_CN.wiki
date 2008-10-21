@@ -1,4 +1,4 @@
-#简单·快捷，抓住瞬间，只争朝夕
+简单·快捷，抓住瞬间，只争朝夕
 
 = Transience =
 
@@ -113,6 +113,7 @@
   # 跨平台的Event/Log同步工具
   # 实现数据可移植性，交互Remember The Milk, Google Calendar, Outlook和PIM
   # 实现时间预算，精确把握时间
+  # 融入数据挖掘和知识发现，自动统筹优化时间。
 
 = 相关资源 =
 
