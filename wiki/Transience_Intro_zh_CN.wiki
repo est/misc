@@ -1,0 +1,13 @@
+#summary One-sentence summary of this page.
+
+= Transience =
+
+基于[http://www.sto-helit.de/index.php?module=page&entry=ms_overview Mortscript]的一键GTD小程序
+
+
+= 特性 =
+
+
+  * 兼容PC, Windows Mobile
+  * Headings, paragraphs, and lists
+  * Automatic links to other wiki pages
