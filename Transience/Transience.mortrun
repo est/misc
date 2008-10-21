@@ -1,0 +1,40 @@
+# Transience GTD tool using Mortscript
+# est presents
+# electronicstar@126.com
+
+#Click a button, write to event_times.ini
+#top 7 stored in time_last.ini
+#time_revise.txt to store event/time record
+# Providing Event/time logs with review functions. Logging as .csv
+#人性化的格式应该是：23:00 看书 10分钟这种。输出按照.csv
+# TODO: settings 初始化，timestamp的cache初始化
+
+strSettingsFile = "settings.ini"
+
+# Reading configuration
+fEventLog = iniRead( strSettingsFile, "Config", "LogFile" )
+fTimestampRecords = iniRead( strSettingsFile, "Config", "TimestampRecords" )
+intTimestampCacheNumber = iniRead( strSettingsFile, "Config", "mestampCacheNumber" )
+strTimeFormat = iniRead( strSettingsFile, "Config", "TimeFormat" )
+#"Y-m-d H:i:s"
+strChoiceTitle = "选择一个以前的时间点"
+strChoiceHint = "也可以根据时间长度选择"
+
+
+# Get current date/time e.g. 2008-10-21 1:36:30
+strTime = FormatTime( strTimeFormat )
+
+# Append TimestampRecords file
+WriteFile( fTimestampRecords, TimeStamp() & "^NL^", TRUE )
+
+# Read cached timestamps
+strLastTimestamps = iniRead( strSettingsFile, "Cache", "LastTimestamps" )
+arrLastTimestamps = Split( strLastTimestamps, ",", TRUE)
+
+# Prompt log some events from previous timestamps?
+intSelectedTimestamp = Choice( strChoiceTitle, strChoiceHint, 
+
+# If user actually write something, save it
+
+# update cached timestamps
+
