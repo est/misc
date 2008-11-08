@@ -23,17 +23,20 @@ def url_encode_utf8(s, safe = ''):
     characters, numbers, '-', '.', '_', '~'
     it's performance is better than `urllib.quote`
     """
-    safe_re = re.compile('([^\w' + re.escape(safe + '-.~') + '])')
+    safe_re = re.compile('([^\w' + re.escape(safe + ';/?:@&=+$,-.~') + '])')
     if type(s)==unicode:
         r = s.encode('utf-8')
     else:
         r = str(s).decode('gbk', 'replace').encode('utf-8')
     return safe_re.sub(lambda x:'%%%02X' % ord(x.group(0)) , r)
 
+def unquote(s):
+    return re.sub('%[a-fA-F0-9]{2}', lambda x: chr(int(x.group()[1:], 16)), s)
 
 def q(url, content=None, headers={}):
     """
     GET/POST an URL, compatible with GAE
+    you must manually encode Headers
     """
     if type(content) == dict:
         headers['Content-Type'] = 'application/x-www-form-urlencoded'
@@ -53,24 +56,21 @@ def new_slug(length=5):
     return ''.join(random.choice(keys) for x in range(length))
 
 
-def _deceq(s):
-    #for `query2dict()` function
-    s = s.split('=')
-    return s[0], re.sub('%[a-fA-F0-9]{2}', lambda x: chr(int(x.group()[1:], 16)), s[1], 128)
-
 def query2dict(s):
     """
     unpack a cgi query string to a dict structure, decoding.
     /search?q=this+is+a+test the plus sign will not be changed.
     if mbcs characters were utf-8 encoded, decode it your self.
     """
-    return dict(map(_deceq, s.split('&')))
+    return dict(map(lambda x:map(lambda x:unquote(x), x.split('=')), s.split('&')))
 
 def dict2query(d, escape=True, sort=True):
-    k = d.keys()
+    k = d.items()
     k.sort()
     encode = url_encode_utf8 if escape else lambda x:x
-    return '&'.join(map( lambda x:x + '='+ encode(d[x]), k if sort else d ))
+    r = '&'.join('%s=%s' % (encode(i), encode(j)) for i,j in (k if sort else map(lambda x:(x,d[x]), d)))
+    print r
+    return r
 
 
 
