@@ -70,6 +70,14 @@ Ping.fm也可以通过GTalk机器人、GTalk状态来发送豆瓣广播。
 
 如果你用的是GTalk更新Ping.fm，消息是通过XMPP加密传输的，GAE的服务器会直接从国外连接豆瓣，应该不会受到GFW影响。
 
+= API和源码 =
+
+API还没有写 - -!
+
+源码在这里：
+浏览：	http://code.google.com/p/zxn0/source/browse/#svn/ping2douban
+SVN：	http://zxn0.googlecode.com/svn/ping2douban/
+
 = 其他计划 =
 
 目前我自己的计划是，看看能不能支持下[http://jiwai.de jiwai.de]和[http://fanfou.com/ fanfou]
