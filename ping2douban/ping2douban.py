@@ -42,13 +42,15 @@ class Doubaner(db.Model):
 class MainPage(webapp.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
-        self.response.out.write("""<html><head></head>Hey I am here
+        self.response.out.write('Welcome, doubaners! <a href="new">Click</a> to continue.<br />Discuss, feedback, contact the author <a href="http://www.douban.com/group/topic/4604950/">here</a>')
+
+"""<html><head></head>Hey I am here
 <form action="pingfm/ac9423e6d78d223b" method="post" accept-charset="utf-8">
 <input type="text" name="message" />
 <input type="submit" />
 </form>
 </html>
-""")
+"""
 
 
 class NewUser(webapp.RequestHandler):
@@ -90,12 +92,11 @@ class SaveUser(webapp.RequestHandler):
             du.oauth_token_secret = secret
             du.slug = new_urn(uid)
             du.put()
-            
-            s = ''.join( map( lambda x:x+'='+str(getattr(du, x))+'<br />' ,dir(du) ) )
+        
             
             self.response.headers['Content-Type'] = 'text/html'
             base_url = self.request.url[:self.request.url.find(self.request.path)]
-            self.response.out.write('You can now point your ping.fm customized URL to:\t%s' % base_url+'/pingfm/'+du.slug+'<br />'+s)
+            self.response.out.write('You can now point your ping.fm customized URL to:\t%s' % base_url+'/pingfm/'+du.slug+'<br />')
         else:
             NotFoundPageHandler.get(self)
 
