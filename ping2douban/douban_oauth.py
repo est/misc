@@ -135,15 +135,6 @@ class douban(object):
         headers['Authorization'] = 'OAuth realm="", ' + ', '.join([x+'="'+ oauth_parameter[x] +'"' for x in oauth_parameter])
         return estutil.q(url, content, headers)
 
-
-def test_q(*args):
-    o = douban()
-    o.oauth_token='0bcad941e7179c5f23608bc5b546d51d'
-    o.oauth_token_secret='6e5cfba6619453aa'
-    return o.q(*args)
-    
-    
-    
     
     
     

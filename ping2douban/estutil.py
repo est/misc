@@ -102,25 +102,3 @@ def dict2query(d, escape=True, sort=True):
     return '&'.join('%s=%s' % (encode(i), encode(d[i])) for i in (k if sort else d))
 
 
-def hmac_sha1(x,y):
-    try:
-        import hashlib # 2.5
-        hashed = hmac.new(key, raw, hashlib.sha1)
-    except:
-        import sha # deprecated
-        hashed = hmac.new(key, raw, sha)
-    return base64.b64encode(hashed.digest())
-
-def oauth_sign(url, method = 'GET'):
-    import oauth, conf
-    consumer = oauth.OAuthConsumer(conf.DOUBAN_API_KEY, conf.DOUBAN_SECRET)
-    token = oauth.OAuthToken('e89e6fba9b67b0dab9db4f2fd237128e', '7019eac5fef959e6')
-    oauth_request = oauth.OAuthRequest.from_consumer_and_token(consumer, token, http_method=method, http_url=url)
-    oauth_request.sign_request(oauth.OAuthSignatureMethod_HMAC_SHA1(), consumer, token)
-    """
-    import douban_oauth
-    o = douban_oauth.douban()
-    o.oauth_token_secret='7019eac5fef959e6'
-    DEBUG('est    ', o.get_signature(method, url, oauth_request.parameters))
-    """
-    return oauth_request.parameters
