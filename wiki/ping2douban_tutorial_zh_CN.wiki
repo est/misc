@@ -78,6 +78,10 @@ API还没有写 - -!
 浏览：	http://code.google.com/p/zxn0/source/browse/#svn/ping2douban
 SVN：	http://zxn0.googlecode.com/svn/ping2douban/
 
+= 媒体报道和其他教程 =
+
+（待补充）
+
 = 其他计划 =
 
 目前我自己的计划是，看看能不能支持下[http://jiwai.de jiwai.de]和[http://fanfou.com/ fanfou]
