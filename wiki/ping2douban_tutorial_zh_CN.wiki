@@ -1,5 +1,7 @@
 通过Ping.fm发豆瓣广播，同步更新你的twitter, friendfeed, Douban, etc.
 
+<wiki:toc max_depth="1" />
+
 = 介绍 =
 
 [http://www.douban.com/ 豆瓣]广播有一个不是很常用的功能：[http://www.douban.com/mine/miniblogs?type=saying 我说]。为了让这个功能不再冷门，est决定把[http://twitter.com/est est的twitter]同步到豆瓣。
@@ -10,7 +12,12 @@
 
 那么，microblogging狂人们有福了。这样一款综合同步超级大喇叭广播方案诞生了。
 
-Ping.fm + ping2douban = 同步你的twitter和豆瓣广播。
+
+/*------------------------------------------------------------------------
+
+         Ping.fm + ping2douban = 同步更新你的twitter和豆瓣广播
+
+------------------------------------------------------------------------*/
 
 http://Ping.fm/_images/layout/logo.gif
 
