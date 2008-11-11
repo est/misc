@@ -75,7 +75,9 @@ Ping.fm也可以通过GTalk机器人、GTalk状态来发送豆瓣广播。
 API还没有写 - -!
 
 源码在这里：
+
 浏览：	http://code.google.com/p/zxn0/source/browse/#svn/ping2douban
+
 SVN：	http://zxn0.googlecode.com/svn/ping2douban/
 
 = 媒体报道和其他教程 =
