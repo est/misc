@@ -55,7 +55,7 @@ Ping.fm也可以通过GTalk机器人、GTalk状态来发送豆瓣广播。
 
 = 其他计划 =
 
-目前我自己的计划是，看看能不能支持下[http://jiwai.de jiwai.de]和[fanfou http://fanfou.com/]
+目前我自己的计划是，看看能不能支持下[http://jiwai.de jiwai.de]和[http://fanfou.com/ fanfou]
 
 开放一个online plugin editor，让大家实现Ping.fm到自定义的任意平台。
 
