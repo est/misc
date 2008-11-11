@@ -81,3 +81,5 @@ Ping.fm也可以通过GTalk机器人、GTalk状态来发送豆瓣广播。
 = Credits =
 
 感谢[http://zsp.javaeye.com/ zsp学长]帮我解决oAuth问题。
+
+感谢[http://www.douban.com/people/killkeeper/ killkeeper同学]多年来忍受我的twitter消息洪流，现在偶要开始大规模轰炸豆瓣广播了。
