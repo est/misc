@@ -1,13 +1,12 @@
 #coding:utf-8
 
-from google.appengine.ext import webapp
-from google.appengine.ext import db
+from google.appengine.ext import webapp, db
 from google.appengine.ext.webapp.util import run_wsgi_app
 
-import conf
+import conf, douban_oauth, estutil
 import hashlib
 
-import douban_oauth
+import logging
 
 #--------------------------------#
 #                                #
@@ -26,11 +25,11 @@ def new_urn(userid):
 #                                #
 #--------------------------------#
 
-class Doubaner(db.model):
-    uid = db.StringProperty(required=True)
-    oauth_token = db.StringProperty(required=True)
-    oauth_token_secret = db.StringProperty(required=True)
-    slug = db.StringProperty(requried=True)
+class Doubaner(db.Model):
+    uid = db.StringProperty()
+    oauth_token = db.StringProperty()
+    oauth_token_secret = db.StringProperty()
+    slug = db.StringProperty()
 
 
 #--------------------------------#
@@ -42,8 +41,14 @@ class Doubaner(db.model):
 
 class MainPage(webapp.RequestHandler):
     def get(self):
-        self.response.headers['Content-Type'] = 'text/plain'
-        self.response.out.write('Hey I am here'+"\n")
+        self.response.headers['Content-Type'] = 'text/html; charset=utf-8'
+        self.response.out.write("""<html><head></head>Hey I am here
+<form action="pingfm/ac9423e6d78d223b" method="post" accept-charset="utf-8">
+<input type="text" name="message" />
+<input type="submit" />
+</form>
+</html>
+""")
 
 
 class NewUser(webapp.RequestHandler):
@@ -51,47 +56,83 @@ class NewUser(webapp.RequestHandler):
     One token per user.
     not one token per customer, not one token per request.
     """
-    def post(self):
-        existing = False
-        if existing:
-        #already in database, show URL, re-oauth
-            pass
-        else:
-        #new user, negotiate with douban
-            oauth = douban_oauth.douban()
-            token = oauth.request_token()
-            #save token to db
-        self.redirect(conf.AUTHORIZATION_URL)
+    def get(self):
+        do = douban_oauth.douban()
+            
+        base_url = self.request.url[:self.request.url.find(self.request.path)]
+        url = do.build_auth_url(base_url+'/finish')
+        n = Doubaner(oauth_token=do.oauth_token, oauth_token_secret=do.oauth_token_secret)
+        n.put()
+        
+        self.redirect(url)
 
 
 class SaveUser(webapp.RequestHandler):
     def get(self):
         #Got redirecte from douban.
         #fetch access token
-        
-        douban_oauth.fetch_access_token()
-        
-        self.response.headers['Content-Type'] = 'text/html'
-        douban_user_id = self.request.get('douban_user_id')
-        url = self.request.url[:self.request.url.find('/', 8)] + '/u/' + new_urn(douban_user_id)
-        self.response.out.write('You can now point your ping.fm customized URL to:\t%s' % url)
+        token = self.request.get('oauth_token', '')
+        if token:
+            do = douban_oauth.douban()
+            du = Doubaner.all().filter('oauth_token =', token).get()
+            
+            do.oauth_token = du.oauth_token
+            do.oauth_token_secret = du.oauth_token_secret
+            
+            at = do.fetch_access_token()
+            
+            token = at['oauth_token']
+            secret = at['oauth_token_secret']
+            uid = at['douban_user_id']
+            
+            du.uid = uid
+            du.oauth_token = token
+            du.oauth_token_secret = secret
+            du.slug = new_urn(uid)
+            du.put()
+            
+            s = ''.join( map( lambda x:x+'='+str(getattr(du, x))+'<br />' ,dir(du) ) )
+            
+            self.response.headers['Content-Type'] = 'text/html'
+            base_url = self.request.url[:self.request.url.find(self.request.path)]
+            self.response.out.write('You can now point your ping.fm customized URL to:\t%s' % base_url+'/pingfm/'+du.slug+'<br />'+s)
+        else:
+            NotFoundPageHandler.get(self)
 
 
 class Pingfm(webapp.RequestHandler):
-    def post(self):
+    def post(self, slug):
         #TODO: token expired?
         method = self.request.get('method', '')
         title = self.request.get('title', '')
         message = self.request.get('message', '')
+        r = Doubaner.all().filter('slug =', slug).get()
+        do = douban_oauth.douban(r.oauth_token, r.oauth_token_secret)
+        c = '<?xml version="1.0" encoding="UTF-8"?>\
+<entry xmlns:ns0="http://www.w3.org/2005/Atom" xmlns:db="http://www.douban.com/xmlns/">\
+<content>%s</content></entry>' % estutil.xml_escape(message)
+        logging.info(r.uid+' '+message)
+        do.q('http://api.douban.com/miniblog/saying', c, { 'Content-Type': 'application/atom+xml' })
+        self.response.out.write('<br />'.join( [x+'='+self.request.get(x, '') for x in self.request.arguments()] ))
+        
+    def get(self, slug):
+        r = Doubaner.all().filter('slug =', slug).get()
+        s = ''.join( map( lambda x:x+'='+str(getattr(r, x))+'<br />' ,dir(r) ) )
+        self.response.out.write(s)
 
+class ShowUser(webapp.RequestHandler):
+    def get(self, uid='1331775'):
+        r = Doubaner.all().filter('uid =', uid).get()
+        do = douban_oauth.douban(r.oauth_token, r.oauth_token_secret)
+        c = do.q('http://api.douban.com/people/%40me').read()
+        self.response.headers['Content-Type'] = 'text/xml'
+        self.response.out.write(c)
 
 #--------------------------------#
 #                                #
 #      URL Re-write router       #
 #                                #
 #--------------------------------#
-
-
 
 class NotFoundPageHandler(webapp.RequestHandler):
     def get(self):
@@ -100,14 +141,13 @@ class NotFoundPageHandler(webapp.RequestHandler):
 
 
 application = webapp.WSGIApplication([
-                                        ('/', MainPage),
-                                       #('/oauth', oAuth),
-                                        ('/create.*$', NewUser),
-                                        ('/finish.*$', SaveUser),
-                                        ('/pingfm.*$', Pingfm),
-                                        
-                                        ('/.*', NotFoundPageHandler),
-                                    ], debug=True)
+    ('/', MainPage),
+    ('/new$', NewUser),
+    ('/finish$', SaveUser),
+    ('/pingfm/(.{16})$', Pingfm),
+    ('/u/[^/]*$', ShowUser),
+    ('/.*', NotFoundPageHandler),
+], debug=True)
 
 def main():
     run_wsgi_app(application)

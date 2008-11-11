@@ -1,6 +1,6 @@
 #coding:utf-8
 
-import time, random, re, hmac, base64
+import time, random, re, hmac, base64, datetime, logging
 import estutil
 from conf import *
 from estutil import url_encode_utf8 as escape
@@ -18,7 +18,10 @@ class douban(object):
     
     oauth_realm = API_HOST
     
-    def __init__(self, comsumer_key=DOUBAN_API_KEY, secret_key=DOUBAN_SECRET):
+    def __init__(self, oauth_token=est_oauth_token, oauth_token_secret=est_oauth_token_secret, comsumer_key=DOUBAN_API_KEY, secret_key=DOUBAN_SECRET):
+        self.oauth_token = oauth_token
+        self.oauth_token_secret = oauth_token_secret
+        
         self.comsumer_key = comsumer_key
         self.secret_key = secret_key
     
@@ -38,30 +41,24 @@ class douban(object):
         else:
             raise Exception('Invalid URL, abort normalize.')
     
-    def get_normalized_parameters(self, parameter):
-        try:
-            del parameter['oauth_signature']
-        except:
-            pass
-        try:
-            del parameter['oauth_realm']
-        except:
-            pass
-        key_values = params.items()
-        key_values.sort()
-        return '&'.join('%s=%s' % (escape(str(k)), escape(str(v))) for k, v in key_values)
     
-    def get_signature(self, http_method='GET', url='', oauth_parameter={}, sign_method='HMAC_SHA1'):
+    def get_normalized_parameters(self, parameter):
+        key_values = filter(lambda x: not x[0] in ['oauth_signature', 'oauth_realm'], parameter.items())
+        key_values.sort()
+        return '%26'.join('%s%%3D%s' % (escape(str(k)), escape(str(v))) for k, v in key_values)
+    
+    def get_signature(self, http_method='GET', url='', oauth_parameter={}, sign_method='HMAC-SHA1'):
         sig = (
                 http_method.upper(),
-                self.get_normalized_http_url(url),
-                estutil.dict2query(oauth_parameter),
+                estutil.url_encode_utf8(self.get_normalized_http_url(url)),
+                self.get_normalized_parameters(oauth_parameter),
             )
         key = escape(self.secret_key) + '&'
         if self.oauth_token_secret:
-            key += '&' + escape(oauth_token_secret)
+            key += escape(self.oauth_token_secret)
         raw = '&'.join(sig)
         # Got key, raw
+        #estutil.DEBUG('est    ', key, raw)
         
         if sign_method=='HMAC-SHA1':
             try:
@@ -78,14 +75,13 @@ class douban(object):
 
     def fetch_request_token(self):
         oauth_parameter = {
-                            'oauth_consumer_key': self.comsumer_key,
-                            'oauth_signature_method': 'PLAINTEXT', #TODO: HMAC-SHA1, RSA-SHA1
-                            'oauth_signature': self.secret_key,
-                            'oauth_timestamp': str(int(time.time())),
-                            'oauth_nonce': generate_nonce(),
-                        }
-        r = estutil.q(REQUEST_TOKEN_URL, oauth_parameter).read()
-        estutil.DEBUG('GOT:\t', r)
+            'oauth_consumer_key': self.comsumer_key,
+            'oauth_signature_method': 'PLAINTEXT', #TODO: HMAC-SHA1, RSA-SHA1
+            'oauth_signature': self.secret_key,
+            'oauth_timestamp': str(int(time.time())),
+            'oauth_nonce': generate_nonce(),
+        }
+        r = estutil.q(REQUEST_TOKEN_URL+'?'+estutil.dict2query(oauth_parameter)).read()
         # should return something like
         # oauth_token=ab3cd9j4ks73hf7g&oauth_token_secret=xyz4992k83j47x0b
         d = estutil.query2dict(r)
@@ -93,24 +89,29 @@ class douban(object):
         self.oauth_token = d['oauth_token']
         return self.oauth_token, self.oauth_token_secret
     
+    def build_auth_url(self, callback=None):
+        oauth_token, oauth_token_secret = self.fetch_request_token()
+        if callback:
+            return '%s?oauth_token=%s&oauth_callback=%s' % ( AUTHORIZATION_URL, oauth_token, callback)
+        else:
+            return AUTHORIZATION_URL + '?oauth_token=' + oauth_token
+    
     def auth_in_browser(self):
         oauth_token, oauth_token_secret = self.fetch_request_token()
-        estutil.DEBUG(oauth_token_secret, oauth_token)
+        ##estutil.DEBUG(oauth_token_secret, oauth_token)
         import webbrowser
         return webbrowser.open(AUTHORIZATION_URL + '?oauth_token=' + oauth_token)
     
     def fetch_access_token(self):
-        print self.secret_key+'&'+ self.oauth_token_secret
         oauth_parameter = {
-                            'oauth_consumer_key': self.comsumer_key,
-                            'oauth_token': self.oauth_token,
-                            'oauth_signature_method': 'PLAINTEXT',
-                            'oauth_signature': self.secret_key+'%26'+ self.oauth_token_secret,
-                            'oauth_timestamp': str(int(time.time())),
-                            'oauth_nonce': generate_nonce(),
-                        }
-        r = estutil.query2dict(estutil.q(ACCESS_TOKEN_URL, oauth_parameter).read())
-        estutil.DEBUG('GOT:\t', r)
+            'oauth_consumer_key': self.comsumer_key,
+            'oauth_token': self.oauth_token,
+            'oauth_signature_method': 'PLAINTEXT',
+            'oauth_signature': self.secret_key+'%26'+ self.oauth_token_secret,
+            'oauth_timestamp': str(int(time.time())),
+            'oauth_nonce': generate_nonce(),
+        }
+        r = estutil.query2dict(estutil.q(ACCESS_TOKEN_URL+'?'+estutil.dict2query(oauth_parameter, False, True)).read())
         # we got
         # oauth_token_secret=6e5cfba6619453aa&oauth_token=0bcad941e7179c5f23608bc5b546d51d&douban_user_id=1331775
         self.oauth_token_secret = r['oauth_token_secret']
@@ -119,48 +120,43 @@ class douban(object):
     
     def q(self, url, content=None, headers={}, method=OAUTH_METHOD):
         oauth_parameter = {
-                            'oauth_consumer_key': self.comsumer_key,
-                            'oauth_token': self.oauth_token,
-                            'oauth_signature_method': method,
-                           #'oauth_signature': self.secret_key+'&'+self.oauth_token_secret,
-                            'oauth_timestamp': str(int(time.time())),
-                            'oauth_nonce': generate_nonce(),
-                        }
-        oauth_parameter['oauth_signature'] = self.get_signature('POST' if content else 'GET', url, oauth_parameter, method)
-        """
-        auth_header = 'OAuth '
-        for x in range(0, len(oauth_parameter), 2):
-            auth_header += oauth_parameter[x] + '="' + oauth_parameter[x+1] + '",'
-        auth_header += 'oauth_version="1.0"'
-        estutil.DEBUG('Authorization: ' + auth_header)
-        headers['Authorization'] = auth_header"""
-        print url+'?'+estutil.dict2query(oauth_parameter)
-        return estutil.q(url+'?'+estutil.dict2query(oauth_parameter), content, headers)
-        
+            'oauth_consumer_key': self.comsumer_key,
+            'oauth_token': self.oauth_token,
+            'oauth_signature_method': 'HMAC-SHA1',
+            'oauth_timestamp': str(int(time.time())),
+            'oauth_nonce': generate_nonce(),
+            'oauth_version': "1.0",
+        }
+        oauth_parameter['oauth_signature'] = self.get_signature(
+            'POST' if content else 'GET',
+            url,
+            oauth_parameter,
+            oauth_parameter['oauth_signature_method'])
+        headers['Authorization'] = 'OAuth realm="", ' + ', '.join([x+'="'+ oauth_parameter[x] +'"' for x in oauth_parameter])
+        return estutil.q(url, content, headers)
+
+
+def test_q(*args):
+    o = douban()
+    o.oauth_token='0bcad941e7179c5f23608bc5b546d51d'
+    o.oauth_token_secret='6e5cfba6619453aa'
+    return o.q(*args)
     
-    #http://api.douban.com/people/%40me?oauth_consumer_key=012a76168934c0af037f62439b9e420d&oauth_nonce=20518562&oauth_signature=1130f4542d4433f4%266e5cfba6619453aa&oauth_signature_method=PLAINTEXT&oauth_timestamp=1226058002&oauth_token=0bcad941e7179c5f23608bc5b546d51d')
-        
-        
-# content-type是application/json或者application/atom+xml，用xhr提交，
-        
-# http://api.douban.com/people/1331775/miniblog/contacts?oauth_consumer_key=012a76168934c0af037f62439b9e420d&oauth_token=0bcad941e7179c5f23608bc5b546d51d&oauth_signature_method=PLAINTEXT&oauth_signature=1130f4542d4433f4%266e5cfba6619453aa&oauth_timestamp=1226061298&oauth_nonce=20518562
-
-#  http://api.douban.com/miniblog/saying?oauth_consumer_key=012a76168934c0af037f62439b9e420d&oauth_token=0bcad941e7179c5f23608bc5b546d51d&oauth_signature_method=PLAINTEXT&oauth_signature=1130f4542d4433f4%266e5cfba6619453aa&oauth_timestamp=1226060450&oauth_nonce=20518562
-        
-    def test2(self):
-        miniblog="""<?xml version="1.0" encoding="UTF-8"?><entry xmlns:ns0="http://www.w3.org/2005/Atom" xmlns:db="http://www.douban.com/xmlns/"><content>测试oAuth</content></entry>"""
-        return self.q('http://api.douban.com/miniblog/saying', miniblog, {'Content-Type': 'application/atom+xml'})
-
-
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
         
         
         

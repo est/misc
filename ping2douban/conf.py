@@ -19,3 +19,6 @@ AUTH_HOST = 'http://www.douban.com'
 REQUEST_TOKEN_URL = AUTH_HOST+'/service/auth/request_token'
 AUTHORIZATION_URL = AUTH_HOST+'/service/auth/authorize'
 ACCESS_TOKEN_URL = AUTH_HOST+'/service/auth/access_token'
+
+est_oauth_token='0bcad941e7179c5f23608bc5b546d51d'
+est_oauth_token_secret='6e5cfba6619453aa'
