@@ -4,7 +4,7 @@
 
 [http://www.douban.com/ 豆瓣]广播有一个不是很常用的功能：[http://www.douban.com/mine/miniblogs?type=saying 我说]。为了让这个功能不再冷门，est决定把[http://twitter.com/est est的twitter]同步到豆瓣。
 
-然后我就想了，为什么不把est的Friendfeed，Facebook，Plurk，Pownce，Tumblr，Jaiku甚至[DormForce MONO http://www2.dormforce.net/flatgrid/mono.php]也全部同步了呢？
+然后我就想了，为什么不把est的Friendfeed，Facebook，Plurk，Pownce，Tumblr，Jaiku甚至也全部同步了呢？
 
 然后我继续想，为什么不把这个功能开放给所有同时使用twitter和豆瓣的用户呢？
 
