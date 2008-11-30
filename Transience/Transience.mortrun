@@ -30,7 +30,7 @@ For i = 1 to MaxIndex(arrLastTimestamps)
         NewTimestamps = NewTimestamps & arrLastTimestamps[i] & ","
     EndIf
 Next
-intSelectedTimestamp = Choice( settings["i18n"]["strChoiceTitle"], settings["i18n"]["strChoiceHint"], 0, 5, arrLastTimes )
+intSelectedTimestamp = Choice( settings["i18n"]["strChoiceTitle"], settings["i18n"]["strChoiceHint"], 0, settings["Config"]["ChoiceDelay"], arrLastTimes )
 
 If (intSelectedTimestamp <> 1 )
     
@@ -54,7 +54,7 @@ Sub ToHumanizedTimeSpan
     Interval = argv[1]
     If(Interval < 60)
         r = Interval & settings["i18n"]["strSeconds"]
-    ElseIf(Interval < 10800)
+    ElseIf(Interval < 3600)
         r = Interval / 60 & settings["i18n"]["strMinutes"] & Interval MOD 60 & settings["i18n"]["strSeconds"]
     Else
         r = Interval / 3600 & settings["i18n"]["strHours"] & Interval MOD 60 & settings["i18n"]["strMinutes"]

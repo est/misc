@@ -1,0 +1,14 @@
+1. PC和WM之间的merge工具。根据完成时间排序
+2. 时间review和补充工具
+3. Visualization
+
+路线图
+
+Windows Mobile上的时间记录工具
+Windows上的时间回顾工具
+Windows上的时间审计工具
+跨平台的Event/Log同步工具。启用Google App Engine
+实现数据可移植性，交互Remember The Milk, Google Calendar, Outlook和PIM
+实现时间预算，精确把握时间
+融入数据挖掘和知识发现，自动统筹优化时间。
+
