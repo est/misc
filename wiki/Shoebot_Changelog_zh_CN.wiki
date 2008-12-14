@@ -1,6 +1,3 @@
-Shoebot_Changelog_zh_CN  
-
-
 = Shoebot更新日志 =
 
 == 2008-12-14 by est ==
