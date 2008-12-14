@@ -1,0 +1,9 @@
+#summary One-sentence summary of this page.
+
+= Shoebot更新日志 =
+
+== 2008-12-14 by est ==
+
+ * 修正 lib\graph\layout.py 中不兼容Python2.5的语法float("inf")
+ * 修正gtksourceview的中文乱码问题
+ * 修正GTK窗体文本编辑框中文乱码问题
