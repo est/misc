@@ -17,3 +17,4 @@ check.sh
  * 第一个免安装Python, GTK的压缩包测试
  * 修复·ximport`语法
  * 程序的icon.png补丁
+ * 兼容GTK+运行库置放于shoebot-ide.py所在目录的GTK\下面，而非系统全局
