@@ -56,10 +56,6 @@ Ping.fm也可以通过GTalk机器人、GTalk状态来发送豆瓣广播。
 
 6. 接下来就可以用Ping.fm在GTalk上的机器人来更新豆瓣广播啦。
 
-= ping2douban在豆瓣的办公楼 =
-
-问题反馈，交流建议，提问互助在这里 http://www.douban.com/group/topic/4604950/
-
 = 调试 =
 
 调试方法非常简单
@@ -97,3 +93,11 @@ SVN：	http://zxn0.googlecode.com/svn/ping2douban/
 感谢[http://www.douban.com/people/zuroc zsp学长]帮我解决oAuth问题。
 
 感谢[http://www.douban.com/people/killkeeper/ killkeeper同学]多年来忍受我的twitter消息洪流，现在偶要开始大规模轰炸豆瓣广播了。
+
+
+
+= ping2douban在豆瓣的办公楼 =
+
+问题反馈，交流建议，提问互助在这里 http://www.douban.com/group/topic/4604950/
+
+在本页面回复的同学请注意，请统一在 http://www.douban.com/group/topic/4604950/ 提问。我很少来这里看回复。
