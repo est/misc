@@ -80,6 +80,10 @@ utm = Math.floor( (ut-uth*3600)/60 )
 uts = ut - uth*3600 - utm*60
 ut = uth+'h'+utm+'m'+uts+'s'                    //uptime in 12h34m56s
 
+//content to be sent to ping.fm/twitter
+text = "WinOMeter yesterday for @est: key presses: "+kp+", mouse trajectory: "+mt+"m, L/M/R clicks: "+lc+"/"+mc+"/"+rc+", uptime: "+ut+" #PYYWS"
+
+
 
 /* --------------------- ping.fm part --------------------- */
 //WScript.Echo(0);
@@ -107,7 +111,7 @@ try
     if(shell.RegRead(dupcheck_key)!=s)
     {
         //WScript.Echo
-        WScript.Echo("WinOMeter yesterday for @est: key presses: "+kp+", mouse trajectory: "+mt+"m, L/M/R clicks: "+lc+"/"+mc+"/"+rc+", uptime: "+ut+" #PYYWS");
+        post_to_pingfm(text);
     }
     shell.RegWrite(dupcheck_key, s);
 }
