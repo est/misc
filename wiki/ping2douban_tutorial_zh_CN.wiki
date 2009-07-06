@@ -101,3 +101,5 @@ SVN：	http://zxn0.googlecode.com/svn/ping2douban/
 问题反馈，交流建议，提问互助在这里 http://www.douban.com/group/topic/4604950/
 
 在本页面回复的同学请注意，请统一在 http://www.douban.com/group/topic/4604950/ 提问。我很少来这里看回复。
+
+Please do NOT put your questions below, go to this thread on Douban http://www.douban.com/group/topic/4604950/ for more help
