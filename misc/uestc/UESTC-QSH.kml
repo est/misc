@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2" xmlns:gx="http://www.google.com/kml/ext/2.2" xmlns:kml="http://www.opengis.net/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">
+<GroundOverlay>
+	<name>UESTC-QSH</name>
+	<description>电子科技大学 清水河校区 平面图 + 卫星照片
+
+http://www.gr.uestc.edu.cn/job/viewjobarticlecontent.shtml?id=1741
+
+对准技术渣我自重。。。
+
+By est
+
+electronicstar@126.com
+
+http://initiative.yo2.cn/
+
+附校车时间表
+
+http://www.lu.uestc.edu.cn/service.asp?id=5</description>
+	<LookAt>
+		<longitude>103.9287642644764</longitude>
+		<latitude>30.75230499207172</latitude>
+		<altitude>0</altitude>
+		<range>2418.111942900609</range>
+		<tilt>0</tilt>
+		<heading>36.99899146401562</heading>
+		<altitudeMode>relativeToGround</altitudeMode>
+	</LookAt>
+	<color>baffffff</color>
+	<Icon>
+		<href>UESTC-QSH.gif</href>
+		<viewBoundScale>0.75</viewBoundScale>
+	</Icon>
+	<LatLonBox>
+		<north>30.76013784540746</north>
+		<south>30.74254414170897</south>
+		<east>103.9405705589936</east>
+		<west>103.9202085211468</west>
+		<rotation>-37.32866404065551</rotation>
+	</LatLonBox>
+</GroundOverlay>
+</kml>
