@@ -1,0 +1,50 @@
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" 
+	"http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd"
+><!--
+	Author: DaedalusInfinity AT gmail DOT com
+	Mod: electronicstar _ 126.com
+--><svg xmlns="http://www.w3.org/2000/svg"
+	onload="startRotate()"
+	><script type="text/javascript"><![CDATA[
+	
+		var if_ref;
+		var transformGroup;
+ 
+		function startRotate()
+		{
+			if_ref = document.getElementById('if_ref');
+			if_ref.src=document.referer;   
+			transformGroup = document.getElementById( "transformGroup" );
+			generateStrings();
+			setInterval( "rotate()", 50 );
+		}
+ 
+		var step = 1;
+		var strings = new Array();
+		function generateStrings()
+		{
+			var q = 0;
+			while( q < 360 )
+			{
+				strings.push( "translate(400,300)rotate("+q+")translate(-400,-200)" );
+				q += step;
+			}
+		}
+ 
+		var current = 0;
+		function rotate()
+		{
+			transformGroup.setAttribute( "transform", strings[current] );
+			current ++;
+			if( current == strings.length ) current = 0;
+		}
+	]]></script><title>Oh yes</title><desc>All your Google are belong to us.</desc 
+	><svg viewBox="0 0 800 600"
+		><g id="transformGroup"
+			><foreignObject width="800" height="400"
+				><body xmlns="http://www.w3.org/1999/xhtml"
+					><iframe id="if_ref" src="about:blank" style="border:none;width:800px;height:400px"></iframe></body 
+			></foreignObject 
+		></g 
+	></svg 
+></svg> 
