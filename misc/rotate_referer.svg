@@ -13,7 +13,11 @@
 		function startRotate()
 		{
 			if_ref = document.getElementById('if_ref');
-			if_ref.src=document.referer;   
+			ref=document.referrer;
+			if(ref=="")
+			{ if_ref.src="http://www.google.com/ncr" }
+			else
+			{ if_ref.src=ref; }
 			transformGroup = document.getElementById( "transformGroup" );
 			generateStrings();
 			setInterval( "rotate()", 50 );
