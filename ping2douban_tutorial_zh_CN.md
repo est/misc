@@ -1,0 +1,109 @@
+通过Ping.fm发豆瓣广播，同步更新你的twitter, friendfeed, Douban, etc.
+
+
+
+# 介绍 #
+
+[豆瓣](http://www.douban.com/)广播有一个不是很常用的功能：[我说](http://www.douban.com/mine/miniblogs?type=saying)。为了让这个功能不再冷门，est决定把[est的twitter](http://twitter.com/est)同步到豆瓣。
+
+然后我就想了，为什么不把est的Friendfeed，Facebook，Plurk，Pownce，Tumblr，Jaiku甚至也全部同步了呢？
+
+然后我继续想，为什么不把这个功能开放给所有同时使用twitter和豆瓣的用户呢？
+
+那么，microblogging狂人们有福了。这样一款综合同步超级大喇叭广播方案诞生了。
+
+
+
+---
+
+
+> Ping.fm + ping2douban = 同步更新你的twitter和豆瓣广播
+
+
+---
+
+
+![http://Ping.fm/_images/layout/logo.gif](http://Ping.fm/_images/layout/logo.gif)
+
+```
+什么是Ping.fm？ 
+Ping.fm is a simple service that makes updating your social networks a snap.
+Use AIM, GTalk, iGoogle, Windows Live Messenger, Yahoo! Messenger, WAP, iPhone/iPod Touch, SMS or E-mail and let Ping.fm relay your message to a multitude of social networking sites.
+Ping.fm 是一个多(微)博客同步更新网站，能帮助用户快速更新自己的多个博客或微博客(microblog）。
+Ping.fm 的工作原理是：用户首先将自己的多个(微)博客账号与 Ping.fm 绑定，然后只要更新 Ping.fm ，就会自动同步信息到多个(微)博客。
+Ping.fm 目前已经支持国外大部分主流(微)博客
+其中包括：Blogger、Facebook、Jaiku、MySpace、Plurk、Pownce、Tumblr、Twitter 等。
+```
+
+由于twitter的IM机器人不争气的永久撤掉了，所以est一般都用Ping.fm的机器人来更新twitter。
+Ping.fm也可以通过GTalk机器人、GTalk状态来发送豆瓣广播。
+
+# 设置 #
+
+1. 首先你得[在Ping.fm注册一个帐号](http://Ping.fm/signup/)
+
+2. 打开 http://ping2douban.appspot.com/new
+
+3. 浏览器会自动跳转到豆瓣网，这个时候你需要给ping2douban一个授权。
+> ![http://zxn0.googlecode.com/svn/static/ping2douban_p3.jpg](http://zxn0.googlecode.com/svn/static/ping2douban_p3.jpg)
+> 点击同意即可。
+
+4. 授权完毕之后，你会得到一个URL。
+> ![http://zxn0.googlecode.com/svn/static/ping2douban_p2.jpg](http://zxn0.googlecode.com/svn/static/ping2douban_p2.jpg)
+
+> URL大概是这个样子的： http://ping2douban.appspot.com/pingfm/xxxxxxxxxxxxxxxx 把这个URL复制下来。**注意**下这个URL是每个人唯一的而且是私密的，不要泄漏给别人了（否则别人就可以乱更新你的豆瓣了）
+
+5. 进入 https://Ping.fm/custom/ ，把刚才那个URL粘贴到Settings / Custom URL输入框里，如图：
+> ![http://zxn0.googlecode.com/svn/static/ping2douban_p1.jpg](http://zxn0.googlecode.com/svn/static/ping2douban_p1.jpg)
+
+> 点击本页的submit提交之后，绑定完成。
+
+6. 接下来就可以用Ping.fm在GTalk上的机器人来更新豆瓣广播啦。
+
+# 调试 #
+
+调试方法非常简单
+
+`wget --post-data="message=hello!" http://ping2douban.appspot.com/pingfm/xxxxxxxxxxxxxxxx`
+
+再看看豆瓣广播是否更新为 hello!
+
+如果你用的是GTalk更新Ping.fm，消息是通过XMPP加密传输的，GAE的服务器会直接从国外连接豆瓣，应该不会受到GFW影响。
+
+# API和源码 #
+
+API还没有写 - -!
+
+源码在这里：
+
+浏览：	http://code.google.com/p/zxn0/source/browse/#svn/ping2douban
+
+SVN：	http://zxn0.googlecode.com/svn/ping2douban/
+
+# 媒体报道和其他教程 #
+
+（待补充）
+
+# 其他计划 #
+
+目前我自己的计划是，看看能不能支持下[jiwai.de](http://jiwai.de)和[fanfou](http://fanfou.com/)
+
+开放一个online plugin editor，让大家实现Ping.fm到自定义的任意平台。
+
+有什么更好的建议，请到上面的帖子反馈
+
+# Credits #
+
+感谢[zsp学长](http://www.douban.com/people/zuroc)帮我解决oAuth问题。
+
+感谢[killkeeper同学](http://www.douban.com/people/killkeeper/)多年来忍受我的twitter消息洪流，现在偶要开始大规模轰炸豆瓣广播了。
+
+
+
+# ping2douban在豆瓣的办公楼 #
+
+问题反馈，交流建议，提问互助在这里 http://www.douban.com/group/topic/4604950/
+
+在本页面回复的同学请注意，请统一在 http://www.douban.com/group/topic/4604950/ 提问。我很少来这里看回复。
+
+Please do NOT put your questions below, go to this thread on Douban http://www.douban.com/group/topic/4604950/ for more help

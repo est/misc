@@ -1,0 +1,20 @@
+# Shoebot更新日志 #
+
+## 2008-12-14 by est ##
+
+  * 修正 lib\graph\layout.py 中不兼容Python2.5的语法float("inf")
+  * 升级代码为 gtksourceview2
+  * 修正gtksourceview的中文乱码问题
+  * 修正GTK窗体文本编辑框中文乱码问题
+  * Python语法高亮定义文件补丁
+```
+ convert.py
+styles.rng
+language.rng
+language2.rng
+check.sh
+```
+  * 第一个免安装Python, GTK的压缩包测试
+  * 修复·ximport`语法
+  * 程序的icon.png补丁
+  * 兼容GTK+运行库置放于shoebot-ide.py所在目录的GTK\下面，而非系统全局
